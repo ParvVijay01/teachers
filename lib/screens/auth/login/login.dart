@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
+import 'package:teachers_app/core/provider/user_provider.dart';
+import 'package:teachers_app/screens/auth/login/components/gradient_text.dart';
 import 'package:teachers_app/screens/auth/login/components/textfield.dart';
 import 'package:teachers_app/utility/constants/colors.dart';
 import 'package:teachers_app/utility/constants/images.dart';
-import 'package:teachers_app/utility/constants/sizes.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -13,8 +15,21 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  TextEditingController? emailController = TextEditingController();
-  TextEditingController? passwordController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  void _login() async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    bool success = await userProvider.login(
+      context,
+      emailController.text,
+      passwordController.text,
+    );
+
+    if (success) {
+      Navigator.pushReplacementNamed(context, "/home"); // Navigate to home
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +42,7 @@ class _LoginState extends State<Login> {
             Padding(
               padding: const EdgeInsets.only(top: 50), // Adds space from top
               child: GradientText(
-                text: "Login",
+                text: "Namaste Guruji",
                 style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
               ),
             ),
@@ -36,11 +51,14 @@ class _LoginState extends State<Login> {
             Center(
               child: Column(
                 children: [
-                  SvgPicture.asset(IKImages.login, height: screenHeight / 2.5),
+                  Image.asset(IKImages.logo, height: screenHeight / 2.5),
                   SizedBox(height: 20),
 
                   // Email and Password TextFields
-                  MyTesxFiled(controller: emailController, labelText: "Email"),
+                  MyTesxFiled(
+                    controller: emailController,
+                    labelText: "Username",
+                  ),
                   MyTesxFiled(
                     controller: passwordController,
                     labelText: "Password",
@@ -56,7 +74,7 @@ class _LoginState extends State<Login> {
                       height: screenHeight / 17,
                       child: ElevatedButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, '/home');
+                          _login();
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: IKColors.secondary,

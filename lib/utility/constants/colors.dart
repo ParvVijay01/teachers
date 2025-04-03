@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class IKColors {
   IKColors._();
-  static const Color primary = Color(0xff211951);
-  static const Color secondary = Color(0xff836FFF);
+  static const Color primary = Color(0xff056436);
+  static const Color secondary = Color(0xffffbf00);
   static const Color danger = Color(0xFFEB5757);
   static const Color success = Color(0xFF219653);
   static const Color warning = Color(0xFFCC9108);
@@ -24,33 +24,4 @@ class IKColors {
   static const Color lightPurple = Color(0xFFC1A4FF); // Light purple
   static const Color darkBlue = Color(0xFF001F3D); // Dark blue
   static const Color lightBlue = Color(0xFF4F8CFF); // Light blue
-}
-
-class GradientText extends StatelessWidget {
-  final String text;
-  final TextStyle style;
-
-  const GradientText({super.key, required this.text, required this.style});
-
-  @override
-  Widget build(BuildContext context) {
-    return ShaderMask(
-      shaderCallback:
-          (bounds) => LinearGradient(
-            colors: [
-              IKColors.primary,
-              IKColors.secondary,
-            ], // Using custom deep purple and teal
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ).createShader(bounds),
-      child: Text(
-        text,
-        style: style.copyWith(
-          color: Colors.white,
-        ), // Text color is ignored due to ShaderMask
-        textAlign: TextAlign.center,
-      ),
-    );
-  }
 }

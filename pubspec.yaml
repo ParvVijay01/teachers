@@ -38,6 +38,13 @@ dependencies:
   splash_master: ^0.0.2
   card_swiper: ^3.0.1
   flutter_svg: ^2.0.17
+  carousel_slider: ^5.0.0
+  intl: ^0.20.2
+  dio: ^5.8.0+1
+  provider: ^6.1.4
+  flutter_pdfview: ^1.4.0
+  open_filex: ^4.7.0
+  path_provider: ^2.1.5
 
 dev_dependencies:
   flutter_test:
@@ -96,7 +103,7 @@ flutter:
 splash_master:
   color: '#E1DCFCFF'
   # Use to specifies the splash image
-  image: 'assets/images/splash.jpg'
+  image: 'assets/images/logo.png'
   # Provides content mode for splash image in iOS
   # iOS content mode options: scaleToFill, scaleAspectFit, scaleAspectFill, redraw, center, top, bottom,
   # left, right, topLeft, topRight, bottomLeft, bottomRight.
@@ -124,6 +131,6 @@ splash_master:
     # Provides the background color of splash screen
     color: '#FFFFFF'
     # Provides custom icon to replace the default app icon
-    image: 'assets/images/splash.jpg'
+    image: 'assets/images/logo.png'
     # Provides branding image which is shown under main icon image. 
     # branding_image: 'assets/branding_image.png'

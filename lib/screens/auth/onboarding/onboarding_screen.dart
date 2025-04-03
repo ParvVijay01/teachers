@@ -5,9 +5,14 @@ import 'package:teachers_app/utility/constants/images.dart';
 import 'package:teachers_app/utility/constants/sizes.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class OnboardingScreen extends StatelessWidget {
-  OnboardingScreen({super.key});
+class OnboardingScreen extends StatefulWidget {
+  const OnboardingScreen({super.key});
 
+  @override
+  State<OnboardingScreen> createState() => _OnboardingScreenState();
+}
+
+class _OnboardingScreenState extends State<OnboardingScreen> {
   final List<Map<String, String>> images = [
     {
       'image': IKImages.onBoarding,
@@ -16,13 +21,13 @@ class OnboardingScreen extends StatelessWidget {
           'Quickly fill out daily teaching logs. Record lesson topics, key points, and class progress—all in one place!',
     },
     {
-      'image': IKImages.onBoarding2, // Fix key from 'images' to 'image'
+      'image': IKImages.onBoarding2,
       'title': 'Stay Organized, Teach Better',
       'description':
           'Keep a record of what you taught each day. Plan ahead and ensure a smooth learning experience for your students!',
     },
     {
-      'image': IKImages.onBoarding3, // Fix key from 'images' to 'image'
+      'image': IKImages.onBoarding3,
       'title': 'Simple & Fast Lesson Logging',
       'description':
           'Fill out daily reports on your classroom lessons in just a few taps. No hassle, just efficient teaching documentation!',
@@ -32,93 +37,108 @@ class OnboardingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        margin: const EdgeInsets.only(top: 50),
-        alignment: Alignment.center,
-        constraints: BoxConstraints(maxWidth: IKSizes.container),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            /// Fix: Wrap Swiper in a SizedBox with a defined height
-            SizedBox(
-              height:
-                  MediaQuery.of(context).size.height *
-                  0.8, // Adjust height as needed
-              child: Swiper(
-                itemBuilder: (context, index) {
-                  final image = images[index]['image'];
-                  final title = images[index]['title']!;
-                  final description = images[index]['description']!;
+      body: SafeArea(
+        child: Container(
+          alignment: Alignment.center,
+          constraints: BoxConstraints(maxWidth: IKSizes.container),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // Swiper occupies available space
+              Expanded(
+                child: Swiper(
+                  itemBuilder: (context, index) {
+                    final image = images[index]['image'];
+                    final title = images[index]['title']!;
+                    final description = images[index]['description']!;
 
-                  return Padding(
-                    padding: const EdgeInsets.all(40),
-                    child: Column(
-                      children: [
-                        SvgPicture.asset(image!),
-                        Text(
-                          title,
-                          style: Theme.of(
-                            context,
-                          ).textTheme.headlineLarge?.merge(
-                            const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          textAlign: TextAlign.center,
-                          maxLines: 3,
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          description,
-                          style: Theme.of(context).textTheme.bodyLarge?.merge(
-                            TextStyle(
-                              color:
-                                  Theme.of(
-                                    context,
-                                  ).textTheme.titleMedium?.color,
-                              fontSize: 15,
+                    return Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(image!),
+                          const SizedBox(height: 20),
+                          Text(
+                            title,
+                            style: Theme.of(
+                              context,
+                            ).textTheme.headlineLarge?.merge(
+                              const TextStyle(fontWeight: FontWeight.bold),
                             ),
+                            textAlign: TextAlign.center,
+                            maxLines: 3,
                           ),
-                          textAlign: TextAlign.center,
-                          maxLines: 3,
-                        ),
-                      ],
+                          const SizedBox(height: 8),
+                          Text(
+                            description,
+                            style: Theme.of(context).textTheme.bodyLarge?.merge(
+                              TextStyle(
+                                color:
+                                    Theme.of(
+                                      context,
+                                    ).textTheme.titleMedium?.color,
+                                fontSize: 15,
+                              ),
+                            ),
+                            textAlign: TextAlign.center,
+                            maxLines: 3,
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                  autoplay: true,
+                  itemCount: images.length,
+                  pagination: SwiperPagination(
+                    builder: DotSwiperPaginationBuilder(
+                      size: 6,
+                      activeSize: 8,
+                      color:
+                          Theme.of(context).brightness == Brightness.dark
+                              ? IKColors.background
+                              : const Color.fromARGB(47, 0, 0, 0),
+                      activeColor:
+                          Theme.of(context).brightness == Brightness.dark
+                              ? IKColors.card
+                              : IKColors.secondary,
+                      space: 4,
                     ),
-                  );
-                },
-                autoplay: true,
-                itemCount: images.length,
-                pagination: SwiperPagination(
-                  builder: DotSwiperPaginationBuilder(
-                    size: 6,
-                    activeSize: 8,
-                    color:
-                        Theme.of(context).brightness == Brightness.dark
-                            ? IKColors.background
-                            : const Color.fromARGB(47, 0, 0, 0),
-                    activeColor:
-                        Theme.of(context).brightness == Brightness.dark
-                            ? IKColors.card
-                            : IKColors.secondary,
-                    space: 4,
                   ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(30.0),
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/login');
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      Theme.of(context).textTheme.titleMedium?.color,
-                  side: const BorderSide(color: IKColors.secondary),
-                  foregroundColor: Theme.of(context).cardColor,
+
+              // Elevated Button at the Bottom
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushReplacementNamed(context, '/login');
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                        side: BorderSide(color: IKColors.primary, width: 3),
+                      ),
+                      backgroundColor: Colors.black,
+                    ),
+                    child: const Text(
+                      "Continue",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
                 ),
-                child: const Text('Continue'),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
