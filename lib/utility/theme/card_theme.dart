@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:teachers_app/utility/constants/colors.dart';
+import 'package:LNP_Guru/utility/constants/colors.dart';
 
 class IKCardTheme {
   IKCardTheme._();

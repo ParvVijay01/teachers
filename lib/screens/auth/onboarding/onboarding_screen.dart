@@ -1,9 +1,8 @@
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
-import 'package:teachers_app/utility/constants/colors.dart';
-import 'package:teachers_app/utility/constants/images.dart';
-import 'package:teachers_app/utility/constants/sizes.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:LNP_Guru/utility/constants/colors.dart';
+import 'package:LNP_Guru/utility/constants/images.dart';
+import 'package:LNP_Guru/utility/constants/sizes.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});

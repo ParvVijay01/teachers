@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-import 'package:teachers_app/core/provider/user_provider.dart';
-import 'package:teachers_app/screens/auth/login/components/gradient_text.dart';
-import 'package:teachers_app/screens/auth/login/components/textfield.dart';
-import 'package:teachers_app/utility/constants/colors.dart';
-import 'package:teachers_app/utility/constants/images.dart';
+import 'package:LNP_Guru/core/provider/user_provider.dart';
+import 'package:LNP_Guru/screens/auth/login/components/gradient_text.dart';
+import 'package:LNP_Guru/screens/auth/login/components/textfield.dart';
+import 'package:LNP_Guru/utility/constants/colors.dart';
+import 'package:LNP_Guru/utility/constants/images.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -17,8 +16,13 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  bool isLoading = false; // Track loading state
 
   void _login() async {
+    setState(() {
+      isLoading = true; // Start loading
+    });
+
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     bool success = await userProvider.login(
       context,
@@ -29,6 +33,10 @@ class _LoginState extends State<Login> {
     if (success) {
       Navigator.pushReplacementNamed(context, "/home"); // Navigate to home
     }
+
+    setState(() {
+      isLoading = false; // Stop loading
+    });
   }
 
   @override
@@ -38,33 +46,31 @@ class _LoginState extends State<Login> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Place Login Text on Top
             Padding(
-              padding: const EdgeInsets.only(top: 50), // Adds space from top
+              padding: const EdgeInsets.only(top: 50),
               child: GradientText(
                 text: "Namaste Guruji",
                 style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
               ),
             ),
-            SizedBox(height: 20), // Space between "Login" text and the rest
-            // Center the rest of the content
+            SizedBox(height: 20),
             Center(
               child: Column(
                 children: [
                   Image.asset(IKImages.logo, height: screenHeight / 2.5),
                   SizedBox(height: 20),
 
-                  // Email and Password TextFields
-                  MyTesxFiled(
+                  MyTextField(
                     controller: emailController,
                     labelText: "Username",
+                    iconShow: false,
                   ),
-                  MyTesxFiled(
+                  MyTextField(
                     controller: passwordController,
                     labelText: "Password",
+                    iconShow: true,
                   ),
 
-                  // Login Button
                   Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 20,
@@ -73,16 +79,25 @@ class _LoginState extends State<Login> {
                     child: SizedBox(
                       height: screenHeight / 17,
                       child: ElevatedButton(
-                        onPressed: () {
-                          _login();
-                        },
+                        onPressed:
+                            isLoading ? null : _login, // Disable when loading
                         style: ElevatedButton.styleFrom(
                           backgroundColor: IKColors.secondary,
                         ),
-                        child: Text(
-                          "Login",
-                          style: TextStyle(color: Colors.white, fontSize: 20),
-                        ),
+                        child:
+                            isLoading
+                                ? CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    IKColors.primary,
+                                  ),
+                                )
+                                : Text(
+                                  "Login",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                  ),
+                                ),
                       ),
                     ),
                   ),

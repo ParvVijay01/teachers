@@ -1,1 +1,1 @@
-const MAIN_URL = "http://10.0.2.2:8080/api";
+const MAIN_URL = "https://teacher-backend-fxy3.onrender.com/api";

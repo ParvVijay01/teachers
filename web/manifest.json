@@ -1,6 +1,6 @@
 {
-    "name": "teachers_app",
-    "short_name": "teachers_app",
+    "name": "LNP_Guru",
+    "short_name": "LNP_Guru",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

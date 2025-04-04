@@ -1,9 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:teachers_app/core/provider/user_provider.dart';
-import 'package:teachers_app/screens/home/components/drawer.dart';
-import 'package:teachers_app/utility/constants/colors.dart';
+import 'package:LNP_Guru/screens/auth/login/components/gradient_text.dart';
+import 'package:LNP_Guru/screens/home/components/drawer.dart';
+import 'package:LNP_Guru/utility/constants/colors.dart';
+import 'package:LNP_Guru/widgets/profile_card.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -22,7 +22,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
 
     //sizess
     final width = MediaQuery.of(context).size.width;
@@ -43,20 +42,17 @@ class _HomeScreenState extends State<HomeScreen> {
           style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
         ),
       ),
-      drawer: MyDrawer(
-        userName: userProvider.user!["name"],
-        userEmail: userProvider.user!["email"],
-        userImage: userProvider.user!["secure_url"],
-        onLogout: () {
-          userProvider.logout();
-          Navigator.pushNamed(context, '/login');
-        },
-      ),
+      drawer: MyDrawer(),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            GradientText(
+              text: "Welcome to LNP_Guru App",
+              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 10),
             // Carousel Slider
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
@@ -96,38 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             SizedBox(height: 20),
-            Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              elevation: 4,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 40,
-                      backgroundImage: NetworkImage(
-                        userProvider.user!["secure_url"],
-                      ),
-                    ),
-                    SizedBox(width: 50),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          userProvider.user!["name"],
-                          style: TextStyle(
-                            fontSize: 25,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            ProfileCard(isHome: true),
             SizedBox(height: 20),
             Row(
               children: [

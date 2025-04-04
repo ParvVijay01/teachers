@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:teachers_app/screens/auth/login/login.dart';
-import 'package:teachers_app/screens/auth/onboarding/onboarding_screen.dart';
-import 'package:teachers_app/screens/home/fillform/fill_form.dart';
-import 'package:teachers_app/screens/home/homeScreen/home_screen.dart';
-import 'package:teachers_app/screens/noticeBox/notice_box.dart';
-import 'package:teachers_app/screens/tutorials/tutorials.dart';
+import 'package:LNP_Guru/screens/auth/login/login.dart';
+import 'package:LNP_Guru/screens/auth/onboarding/onboarding_screen.dart';
+import 'package:LNP_Guru/screens/home/fillform/fill_form.dart';
+import 'package:LNP_Guru/screens/home/homeScreen/home_screen.dart';
+import 'package:LNP_Guru/screens/noticeBox/notice_box.dart';
+import 'package:LNP_Guru/screens/profile/profile.dart';
+import 'package:LNP_Guru/screens/reports/report.dart';
+import 'package:LNP_Guru/screens/tutorials/tutorials.dart';
 
 class AppRoutes {
   static const String home = '/home';
@@ -13,6 +15,8 @@ class AppRoutes {
   static const String fillform = '/fillform';
   static const String noticeBox = '/noticebox';
   static const String tutorials = '/tutorials';
+  static const String profile = '/profile';
+  static const String report = '/report';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -34,6 +38,11 @@ class AppRoutes {
       case tutorials:
         return MaterialPageRoute(builder: (_) => Tutorials());
 
+      case profile:
+        return MaterialPageRoute(builder: (_) => Profile());
+
+      case report:
+        return MaterialPageRoute(builder: (_) => ReportScreen());
 
       default:
         return _errorRoute("Page not found!");

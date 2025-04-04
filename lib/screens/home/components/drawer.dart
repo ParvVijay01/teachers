@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:teachers_app/utility/constants/colors.dart';
+import 'package:provider/provider.dart';
+import 'package:LNP_Guru/core/provider/user_provider.dart';
+import 'package:LNP_Guru/utility/constants/colors.dart';
 
 class MyDrawer extends StatelessWidget {
-  final String userName;
-  final String userEmail;
-  final String userImage;
-  final VoidCallback onLogout;
-
-  const MyDrawer({
-    super.key,
-    required this.userName,
-    required this.userEmail,
-    required this.userImage,
-    required this.onLogout,
-  });
+  const MyDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
+    UserProvider userProvider = Provider.of<UserProvider>(
+      context,
+      listen: false,
+    );
+
+    String userName = userProvider.user!["name"];
+    String userEmail = userProvider.user!["email"];
+    String userImage = userProvider.user!["secure_url"];
+
     return Drawer(
       child: Container(
         color: IKColors.light, // Background color for the entire drawer
@@ -56,12 +56,29 @@ class MyDrawer extends StatelessWidget {
             ListTile(
               leading: Icon(Icons.home, color: Colors.black),
               title: Text('Home', style: TextStyle(color: Colors.black)),
-              onTap: () => Navigator.pushReplacementNamed(context, '/home'),
+              onTap:
+                  () => {
+                    Navigator.pop(context),
+                    Navigator.pushNamed(context, '/home'),
+                  },
             ),
             ListTile(
               leading: Icon(Icons.person, color: Colors.black),
               title: Text('Profile', style: TextStyle(color: Colors.black)),
-              onTap: () => Navigator.pushReplacementNamed(context, '/profile'),
+              onTap:
+                  () => {
+                    Navigator.pop(context),
+                    Navigator.pushNamed(context, '/profile'),
+                  },
+            ),
+            ListTile(
+              leading: Icon(Icons.dashboard, color: Colors.black),
+              title: Text('Reports', style: TextStyle(color: Colors.black)),
+              onTap:
+                  () => {
+                    Navigator.pop(context),
+                    Navigator.pushNamed(context, '/report'),
+                  },
             ),
             Spacer(), // Push logout button to the bottom
             Divider(
@@ -73,7 +90,11 @@ class MyDrawer extends StatelessWidget {
             ListTile(
               leading: Icon(Icons.exit_to_app, color: Colors.red),
               title: Text('Log Out', style: TextStyle(color: Colors.red)),
-              onTap: onLogout,
+              onTap:
+                  () => {
+                    userProvider.logout(),
+                    Navigator.pushNamed(context, '/login'),
+                  },
             ),
             SizedBox(height: 20),
           ],

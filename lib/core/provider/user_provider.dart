@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:teachers_app/service/dio_service.dart';
+import 'package:LNP_Guru/service/dio_service.dart';
 
 class UserProvider with ChangeNotifier {
   String? _token;
@@ -11,7 +11,11 @@ class UserProvider with ChangeNotifier {
   final DioService _dioService = DioService();
 
   // Login function
-  Future<bool> login(BuildContext context, String email, String password) async {
+  Future<bool> login(
+    BuildContext context,
+    String email,
+    String password,
+  ) async {
     var data = await _dioService.loginUser(email, password);
 
     if (data["success"]) {
@@ -30,10 +34,7 @@ class UserProvider with ChangeNotifier {
     } else {
       // Show error message from API response
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(data["message"]),
-          backgroundColor: Colors.red,
-        ),
+        SnackBar(content: Text(data["message"]), backgroundColor: Colors.red),
       );
       return false;
     }

@@ -7,7 +7,7 @@ class Tutorial {
   factory Tutorial.fromJson(Map<String, dynamic> json) {
     return Tutorial(
       id: json['_id'],
-      title: json['className'],
+      title: json['title'],
       secureUrl: json['secure_url'] 
     );
   }

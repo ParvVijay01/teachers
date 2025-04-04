@@ -1,4 +1,4 @@
-name: teachers_app
+name: LNP_Guru
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -45,6 +45,9 @@ dependencies:
   flutter_pdfview: ^1.4.0
   open_filex: ^4.7.0
   path_provider: ^2.1.5
+  url_launcher: ^6.3.1
+  shared_preferences: ^2.5.3
+  flutter_launcher_icons: ^0.14.3
 
 dev_dependencies:
   flutter_test:
@@ -134,3 +137,11 @@ splash_master:
     image: 'assets/images/logo.png'
     # Provides branding image which is shown under main icon image. 
     # branding_image: 'assets/branding_image.png'
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/logo.png"  # Ensure this path is correct
+  adaptive_icon_background: "#FFFFFF"   # Optional (for Android adaptive icons)
+  adaptive_icon_foreground: "assets/images/logo.png"  # Optional (for Android adaptive icons)
+

@@ -1,14 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:teachers_app/models/notice.dart';
-import 'package:teachers_app/service/dio_service.dart';
-import 'package:teachers_app/utility/constants/colors.dart';
+import 'package:LNP_Guru/models/notice.dart';
+import 'package:LNP_Guru/service/dio_service.dart';
+import 'package:LNP_Guru/utility/constants/colors.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
-
-import 'package:teachers_app/utility/constants/constants.dart';
-
 
 class NoticeBox extends StatefulWidget {
   const NoticeBox({super.key});
@@ -19,13 +16,43 @@ class NoticeBox extends StatefulWidget {
 
 class _NoticeBoxState extends State<NoticeBox> {
   late Future<List<Notice>> futureNotice;
-
   final DioService dioService = DioService();
+  Map<int, bool> isLoadingMap = {}; // Track loading state for each notice
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  void initState() {
+    super.initState();
     futureNotice = dioService.fetchNotice();
+  }
+
+  Future<void> _downloadAndOpenPdf(
+    String fileUrl,
+    String fileName,
+    int index,
+  ) async {
+    setState(() {
+      isLoadingMap[index] = true; // Set loading state for the clicked item
+    });
+
+    try {
+      // Get temporary directory
+      Directory tempDir = await getTemporaryDirectory();
+      String filePath = "${tempDir.path}/$fileName.pdf";
+
+      // Download the PDF
+      await Dio().download(fileUrl, filePath);
+
+      // Open the downloaded file
+      await OpenFilex.open(filePath);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Can't open PDF"), backgroundColor: Colors.red),
+      );
+    }
+
+    setState(() {
+      isLoadingMap[index] = false; // Reset loading state after completion
+    });
   }
 
   @override
@@ -51,28 +78,10 @@ class _NoticeBoxState extends State<NoticeBox> {
             itemCount: notices.length,
             itemBuilder: (context, index) {
               return GestureDetector(
-                onTap: () async {
-                  String baseUrl = MAIN_URL;
-                  String fileUrl = "$baseUrl${notices[index].secureUrl}";
-
-                  try {
-                    // Get temporary directory
-                    Directory tempDir = await getTemporaryDirectory();
-                    String filePath =
-                        "${tempDir.path}/${notices[index].name}.pdf";
-
-                    print("Downloading PDF from: $fileUrl");
-
-                    // Download the PDF
-                    await Dio().download(fileUrl, filePath);
-
-                    print("PDF saved at: $filePath");
-
-                    // Open the downloaded file
-                    await OpenFilex.open(filePath);
-                  } catch (e) {
-                    print("Error opening PDF: $e");
-                  }
+                onTap: () {
+                  String baseUrl = "https://teacher-backend-fxy3.onrender.com";
+                  String fileUrl = "$baseUrl/${notices[index].secureUrl}";
+                  _downloadAndOpenPdf(fileUrl, notices[index].name, index);
                 },
                 child: Card(
                   margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -81,11 +90,21 @@ class _NoticeBoxState extends State<NoticeBox> {
                       notices[index].name,
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-
                     leading: Icon(
                       Icons.picture_as_pdf,
                       color: IKColors.primary,
                     ),
+                    trailing:
+                        isLoadingMap[index] == true
+                            ? SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: IKColors.primary,
+                              ),
+                            )
+                            : null, // No icon when not loading
                   ),
                 ),
               );

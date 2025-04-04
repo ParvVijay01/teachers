@@ -1,4 +1,4 @@
-package com.example.teachers_app
+package com.example.LNP_Guru
 
 import io.flutter.embedding.android.FlutterActivity
 

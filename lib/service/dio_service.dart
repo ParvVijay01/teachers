@@ -1,9 +1,10 @@
 import 'package:dio/dio.dart';
-import 'package:teachers_app/models/classes.dart';
-import 'package:teachers_app/models/notice.dart';
-import 'package:teachers_app/models/subject.dart';
-import 'package:teachers_app/models/tutorials.dart';
-import 'package:teachers_app/utility/constants/constants.dart';
+import 'package:LNP_Guru/models/classes.dart';
+import 'package:LNP_Guru/models/notice.dart';
+import 'package:LNP_Guru/models/schedule.dart';
+import 'package:LNP_Guru/models/subject.dart';
+import 'package:LNP_Guru/models/tutorials.dart';
+import 'package:LNP_Guru/utility/constants/constants.dart';
 
 class DioService {
   final Dio _dio = Dio(
@@ -91,8 +92,25 @@ class DioService {
       final response = await _dio.get("/links/links");
       if (response.statusCode == 200) {
         List<dynamic> data = response.data;
-        print("data ---> $data");
-        return data.map((json) => Tutorial.fromJson(json)).toList();
+        List<Tutorial> tutorials =
+            data.map((json) => Tutorial.fromJson(json)).toList();
+        return tutorials;
+      } else {
+        throw Exception("Failed to load data");
+      }
+    } catch (e) {
+      throw Exception("Error: $e");
+    }
+  }
+
+  Future<List<Schedules>> getAllScheds() async {
+    try {
+      final response = await _dio.get("/schedule/schedules");
+      if (response.statusCode == 200) {
+        List<dynamic> data = response.data;
+        List<Schedules> schedules =
+            data.map((json) => Schedules.fromJson(json)).toList();
+        return schedules;
       } else {
         throw Exception("Failed to load data");
       }
