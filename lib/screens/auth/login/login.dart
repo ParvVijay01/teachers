@@ -17,10 +17,13 @@ class _LoginState extends State<Login> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool isLoading = false; // Track loading state
+  final _formKey = GlobalKey<FormState>();
 
   void _login() async {
+    if (!_formKey.currentState!.validate()) return;
+
     setState(() {
-      isLoading = true; // Start loading
+      isLoading = true;
     });
 
     final userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -31,11 +34,11 @@ class _LoginState extends State<Login> {
     );
 
     if (success) {
-      Navigator.pushReplacementNamed(context, "/home"); // Navigate to home
+      Navigator.pushReplacementNamed(context, "/home");
     }
 
     setState(() {
-      isLoading = false; // Stop loading
+      isLoading = false;
     });
   }
 
@@ -59,16 +62,31 @@ class _LoginState extends State<Login> {
                 children: [
                   Image.asset(IKImages.logo, height: screenHeight / 2.5),
                   SizedBox(height: 20),
-
                   MyTextField(
                     controller: emailController,
                     labelText: "Username",
                     iconShow: false,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your email';
+                      } else if (!RegExp(
+                        r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+                      ).hasMatch(value)) {
+                        return 'Please enter a valid email address';
+                      }
+                      return null;
+                    },
                   ),
                   MyTextField(
                     controller: passwordController,
                     labelText: "Password",
                     iconShow: true,
+                    validator: (value) {
+                      if (value == null || value.length < 6) {
+                        return 'Password must be at least 6 characters';
+                      }
+                      return null;
+                    },
                   ),
 
                   Padding(

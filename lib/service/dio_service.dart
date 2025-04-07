@@ -1,3 +1,4 @@
+import 'package:LNP_Guru/models/banners.dart';
 import 'package:dio/dio.dart';
 import 'package:LNP_Guru/models/classes.dart';
 import 'package:LNP_Guru/models/notice.dart';
@@ -111,6 +112,22 @@ class DioService {
         List<Schedules> schedules =
             data.map((json) => Schedules.fromJson(json)).toList();
         return schedules;
+      } else {
+        throw Exception("Failed to load data");
+      }
+    } catch (e) {
+      throw Exception("Error: $e");
+    }
+  }
+
+  Future<List<Banners>> fetAllBanners() async {
+    try {
+      final response = await _dio.get("/banners/banners");
+      if (response.statusCode == 200) {
+        List<dynamic> data = response.data;
+        List<Banners> banners =
+            data.map((json) => Banners.fromJson(json)).toList();
+        return banners;
       } else {
         throw Exception("Failed to load data");
       }

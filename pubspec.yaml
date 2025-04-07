@@ -35,7 +35,6 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   get: ^4.7.2
-  splash_master: ^0.0.2
   card_swiper: ^3.0.1
   flutter_svg: ^2.0.17
   carousel_slider: ^5.0.0
@@ -103,40 +102,6 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
 
-splash_master:
-  color: '#E1DCFCFF'
-  # Use to specifies the splash image
-  image: 'assets/images/logo.png'
-  # Provides content mode for splash image in iOS
-  # iOS content mode options: scaleToFill, scaleAspectFit, scaleAspectFill, redraw, center, top, bottom,
-  # left, right, topLeft, topRight, bottomLeft, bottomRight.
-  ios_content_mode: 'center'
-  # Provides gravity for splash image in Android
-  # Android gravity options: center, clip_horizontal, clip_vertical, fill_horizontal, fill, center_vertical, 
-  # bottom, fill_vertical, center_horizontal, top, end, left, right, start
-  android_gravity: 'center'
-  # Use to specifies the splash image
-  # background_image: 'assets/background_image.png'
-  # Provided content mode for splash image in background for iOS
-  ios_background_content_mode: 'scaleToFill'
-  # Provides gravity for background image in Android
-  # Android gravity options: center, clip_horizontal, clip_vertical, fill_horizontal, fill, center_vertical, 
-  # bottom, fill_vertical, center_horizontal, top, end, left, right, start
-  android_background_image_gravity: 'fill'
-  # Use to specifies image for android in dark mode
-  # image_dark_android: 'assets/splash_dark.png'
-  # Provides gravity for splash image for Android in dark mode
-  android_dark_gravity_key: 'center'
-  # Use to specifies the color for the splash screen for Android in dark mode
-  color_dark_android: '#000000'
-  # Section to specifies the configuration for the splash in Android 12+
-  android_12_and_above:
-    # Provides the background color of splash screen
-    color: '#FFFFFF'
-    # Provides custom icon to replace the default app icon
-    image: 'assets/images/logo.png'
-    # Provides branding image which is shown under main icon image. 
-    # branding_image: 'assets/branding_image.png'
 
 flutter_icons:
   android: true

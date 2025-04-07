@@ -5,12 +5,14 @@ class MyTextField extends StatefulWidget {
   final TextEditingController? controller;
   final String labelText;
   final bool iconShow; // Keep this final
+  final String? Function(String?)? validator;
 
-  MyTextField({
+  const MyTextField({
     super.key,
     required this.controller,
     required this.labelText,
     required this.iconShow,
+    this.validator
   });
 
   @override
@@ -25,6 +27,7 @@ class _MyTextFieldState extends State<MyTextField> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: TextFormField(
+        validator: widget.validator,
         obscureText:
             widget.iconShow ? _isObscure : !_isObscure, // Use state variable
         controller: widget.controller,
