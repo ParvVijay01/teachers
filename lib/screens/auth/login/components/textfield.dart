@@ -12,7 +12,7 @@ class MyTextField extends StatefulWidget {
     required this.controller,
     required this.labelText,
     required this.iconShow,
-    this.validator
+    this.validator,
   });
 
   @override
@@ -42,6 +42,22 @@ class _MyTextFieldState extends State<MyTextField> {
             borderSide: BorderSide(color: IKColors.secondary, width: 3),
             borderRadius: BorderRadius.circular(15),
           ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(
+              color: IKColors.primary,
+              width: 2,
+            ), // Same as focused
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(
+              color: IKColors.danger,
+              width: 2,
+            ), // Same as focused
+          ),
+
+          errorStyle: TextStyle(color: Colors.red),
           suffixIcon:
               widget.iconShow
                   ? IconButton(

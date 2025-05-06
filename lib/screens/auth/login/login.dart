@@ -47,82 +47,88 @@ class _LoginState extends State<Login> {
     double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 50),
-              child: GradientText(
-                text: "Namaste Guruji",
-                style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 50),
+                child: GradientText(
+                  text: "Namaste Guruji",
+                  style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
+                ),
               ),
-            ),
-            SizedBox(height: 20),
-            Center(
-              child: Column(
-                children: [
-                  Image.asset(IKImages.logo, height: screenHeight / 2.5),
-                  SizedBox(height: 20),
-                  MyTextField(
-                    controller: emailController,
-                    labelText: "Username",
-                    iconShow: false,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your email';
-                      } else if (!RegExp(
-                        r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
-                      ).hasMatch(value)) {
-                        return 'Please enter a valid email address';
-                      }
-                      return null;
-                    },
-                  ),
-                  MyTextField(
-                    controller: passwordController,
-                    labelText: "Password",
-                    iconShow: true,
-                    validator: (value) {
-                      if (value == null || value.length < 6) {
-                        return 'Password must be at least 6 characters';
-                      }
-                      return null;
-                    },
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 10,
+              SizedBox(height: 20),
+              Center(
+                child: Column(
+                  children: [
+                    Image.asset(IKImages.logo, height: screenHeight / 2.5),
+                    SizedBox(height: 20),
+                    MyTextField(
+                      controller: emailController,
+                      labelText: "Username",
+                      iconShow: false,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Username is required';
+                        } else if (!RegExp(
+                          r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+                        ).hasMatch(value)) {
+                          return 'Invalid email address';
+                        }
+                        return null;
+                      },
                     ),
-                    child: SizedBox(
-                      height: screenHeight / 17,
-                      child: ElevatedButton(
-                        onPressed:
-                            isLoading ? null : _login, // Disable when loading
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: IKColors.secondary,
+
+                    MyTextField(
+                      controller: passwordController,
+                      labelText: "Password",
+                      iconShow: true,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Password is required';
+                        } else if (value.length < 6) {
+                          return 'Minimum length 6';
+                        }
+                        return null;
+                      },
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 10,
+                      ),
+                      child: SizedBox(
+                        height: screenHeight / 17,
+                        child: ElevatedButton(
+                          onPressed:
+                              isLoading ? null : _login, // Disable when loading
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: IKColors.secondary,
+                          ),
+                          child:
+                              isLoading
+                                  ? CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      IKColors.primary,
+                                    ),
+                                  )
+                                  : Text(
+                                    "Login",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                    ),
+                                  ),
                         ),
-                        child:
-                            isLoading
-                                ? CircularProgressIndicator(
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                    IKColors.primary,
-                                  ),
-                                )
-                                : Text(
-                                  "Login",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20,
-                                  ),
-                                ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

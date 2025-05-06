@@ -202,6 +202,7 @@ class _ReportScreenState extends State<ReportScreen> {
                         ),
                         dataRowHeight: 50, // Adjust row height
                         columns: const [
+                          DataColumn(label: Text("Center")),
                           DataColumn(label: Text("Batch")),
                           DataColumn(label: Text("Subject")),
                           DataColumn(label: Text("Chapter")),
@@ -212,6 +213,7 @@ class _ReportScreenState extends State<ReportScreen> {
                             schedules.map((schedule) {
                               return DataRow(
                                 cells: [
+                                  DataCell(Text(schedule.centerName)),
                                   DataCell(Text(schedule.className)),
                                   DataCell(Text(schedule.subjectName)),
                                   DataCell(Text(schedule.chapterName)),

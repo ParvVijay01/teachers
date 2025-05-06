@@ -1,9 +1,10 @@
+import 'package:LNP_Guru/models/centers.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:LNP_Guru/core/provider/user_provider.dart';
 import 'package:LNP_Guru/models/chapter.dart';
-import 'package:LNP_Guru/models/classes.dart';
+import 'package:LNP_Guru/models/batches.dart';
 import 'package:LNP_Guru/models/subject.dart';
 import 'package:LNP_Guru/service/dio_service.dart';
 import 'package:LNP_Guru/utility/constants/colors.dart';
@@ -17,7 +18,6 @@ class FillForm extends StatefulWidget {
 }
 
 class _FillFormState extends State<FillForm> {
-  final String date = DateFormat('yyyy-MM-dd').format(DateTime.now());
   final _formKey = GlobalKey<FormState>();
   final DioService dioService = DioService();
   final Dio dio = Dio();
@@ -28,22 +28,42 @@ class _FillFormState extends State<FillForm> {
   List<Chapter> availableChapters = [];
   Subject? selectedSubject;
   Chapter? selectedChapter;
-  Classes? selectedClass;
+  Batches? selectedClass;
+  Centers? selectedCenter;
 
-  late Future<List<Classes>> futureClasses;
+  late Future<List<Batches>> futureClasses;
   late Future<List<Subject>> futureSubjects;
+  late Future<List<Centers>> futureCenters;
+
+  DateTime selectedDate = DateTime.now();
 
   @override
   void initState() {
     super.initState();
     futureSubjects = dioService.fetchSubjects();
-    futureClasses = dioService.fetchClasses(); // Assign it once
+    futureClasses = dioService.fetchBatches();
+    futureCenters = dioService.fetchCenters();
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(2022),
+      lastDate: DateTime.now(),
+    );
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+      });
+    }
   }
 
   Future<void> submitReport() async {
     if (selectedSubject == null ||
         selectedChapter == null ||
         selectedClass == null ||
+        selectedCenter == null ||
         topicController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Please fill all the fields!")),
@@ -70,8 +90,9 @@ class _FillFormState extends State<FillForm> {
           "subjectName": selectedSubject!.subjectName,
           "chapterName": selectedChapter!.chapterName,
           "topic": topicController.text.trim(),
-          "date": date,
+          "date": DateFormat('yyyy-MM-dd').format(selectedDate),
           "className": selectedClass!.className,
+          "centerName": selectedCenter!.name,
         },
       );
 
@@ -83,6 +104,7 @@ class _FillFormState extends State<FillForm> {
         selectedChapter = null;
         selectedClass = null;
         selectedSubject = null;
+        selectedCenter = null;
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Failed to submit report!")),
@@ -124,31 +146,55 @@ class _FillFormState extends State<FillForm> {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 20),
-                Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  elevation: 4,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.calendar_today, color: IKColors.primary),
-                        const SizedBox(width: 8),
-                        const Text(
-                          "Current date:",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                          ),
+
+                /// Date Picker
+                InkWell(
+                  onTap: () => _selectDate(context),
+                  borderRadius: BorderRadius.circular(10),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 14,
+                      horizontal: 16,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: IKColors.primary, width: 2),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.2),
+                          spreadRadius: 1,
+                          blurRadius: 4,
+                          offset: const Offset(0, 2),
                         ),
-                        const SizedBox(width: 6),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.calendar_today,
+                              color: IKColors.primary,
+                            ),
+                            const SizedBox(width: 10),
+                            Text(
+                              "Select Date",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.grey[800],
+                              ),
+                            ),
+                          ],
+                        ),
                         Text(
-                          date,
+                          DateFormat('yyyy-MM-dd').format(selectedDate),
                           style: const TextStyle(
-                            fontSize: 18,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
+                            color: Colors.black87,
                           ),
                         ),
                       ],
@@ -157,8 +203,62 @@ class _FillFormState extends State<FillForm> {
                 ),
                 const SizedBox(height: 20),
 
-                /// **Class Dropdown**
-                FutureBuilder<List<Classes>>(
+                /// Center Dropdown
+                FutureBuilder<List<Centers>>(
+                  future: futureCenters,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: IKColors.primary,
+                        ),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text("Error: ${snapshot.error}"));
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return const Center(child: Text("No Batches available"));
+                    }
+
+                    List<Centers> centers = snapshot.data!;
+
+                    return DropdownButtonFormField<Centers>(
+                      decoration: InputDecoration(
+                        hintText: "Select Center",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            width: 2,
+                            color: Colors.grey.shade500,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            color: IKColors.primary,
+                            width: 3,
+                          ),
+                        ),
+                      ),
+                      value: selectedCenter,
+                      items:
+                          centers.map((center) {
+                            return DropdownMenuItem(
+                              value: center,
+                              child: Text(center.name),
+                            );
+                          }).toList(),
+                      onChanged: (Centers? newValue) {
+                        setState(() {
+                          selectedCenter = newValue;
+                        });
+                      },
+                    );
+                  },
+                ),
+                const SizedBox(height: 10),
+
+                /// Class Dropdown
+                FutureBuilder<List<Batches>>(
                   future: futureClasses,
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
@@ -173,14 +273,9 @@ class _FillFormState extends State<FillForm> {
                       return const Center(child: Text("No Batches available"));
                     }
 
-                    List<Classes> classes = snapshot.data!;
+                    List<Batches> classes = snapshot.data!;
 
-                    if (selectedClass != null &&
-                        !classes.any((cls) => cls.id == selectedClass!.id)) {
-                      selectedClass = null;
-                    }
-
-                    return DropdownButtonFormField<Classes>(
+                    return DropdownButtonFormField<Batches>(
                       decoration: InputDecoration(
                         hintText: "Select Batch",
                         border: OutlineInputBorder(
@@ -206,7 +301,7 @@ class _FillFormState extends State<FillForm> {
                               child: Text(cls.className),
                             );
                           }).toList(),
-                      onChanged: (Classes? newValue) {
+                      onChanged: (Batches? newValue) {
                         setState(() {
                           selectedClass = newValue;
                         });
@@ -214,10 +309,9 @@ class _FillFormState extends State<FillForm> {
                     );
                   },
                 ),
-
                 const SizedBox(height: 10),
 
-                /// **Subject Dropdown**
+                /// Subject Dropdown
                 FutureBuilder<List<Subject>>(
                   future: futureSubjects,
                   builder: (context, snapshot) {
@@ -234,11 +328,6 @@ class _FillFormState extends State<FillForm> {
                     }
 
                     List<Subject> subjects = snapshot.data!;
-
-                    if (selectedSubject != null &&
-                        !subjects.any((sub) => sub.id == selectedSubject!.id)) {
-                      selectedSubject = null;
-                    }
 
                     return DropdownButtonFormField<Subject>(
                       decoration: InputDecoration(
@@ -276,12 +365,12 @@ class _FillFormState extends State<FillForm> {
                     );
                   },
                 ),
-
                 const SizedBox(height: 10),
 
-                /// **Chapter Dropdown**
+                /// Chapter Dropdown
                 DropdownButtonFormField<Chapter>(
                   decoration: InputDecoration(
+                    hintText: "Select Chapter",
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                       borderSide: BorderSide(
@@ -310,31 +399,29 @@ class _FillFormState extends State<FillForm> {
                             });
                           }
                           : null,
-                  hint: const Text("Select Chapter"),
                 ),
-
                 const SizedBox(height: 10),
 
-                /// **Topic TextField**
+                /// Topic Text Field
                 TextField(
                   controller: topicController,
                   minLines: 5,
                   maxLines: 8,
                   decoration: InputDecoration(
+                    hintText: "Topics Discussed",
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(width: 2),
+                      borderSide: const BorderSide(width: 2),
                     ),
-                    hintText: "Topics Discussed",
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: IKColors.primary, width: 3),
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                 ),
-
                 const SizedBox(height: 20),
 
+                /// Submit Button
                 SizedBox(
                   height: height * 0.06,
                   child: ElevatedButton(
@@ -348,7 +435,7 @@ class _FillFormState extends State<FillForm> {
                     child:
                         _isLoading
                             ? const CircularProgressIndicator(
-                              color: IKColors.primary,
+                              color: Colors.white,
                             )
                             : const Text(
                               "Submit Report",

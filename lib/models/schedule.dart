@@ -1,7 +1,7 @@
 import 'package:LNP_Guru/models/user_sched.dart';
 
 class Schedules {
-  final String id, subjectName, chapterName, topic, date, className;
+  final String id, subjectName, chapterName, topic, date, className, centerName;
   final User userId;
 
   Schedules({
@@ -12,6 +12,7 @@ class Schedules {
     required this.date,
     required this.userId,
     required this.className,
+    required this.centerName,
   });
 
   factory Schedules.fromJson(Map<String, dynamic> json) {
@@ -23,6 +24,7 @@ class Schedules {
       date: json['date'],
       className: json['className'] ?? "BATCH",
       userId: User.fromJson(json['userId']),
+      centerName: json['centerName'] ?? "Center Name",
     );
   }
 }

@@ -80,6 +80,15 @@ class MyDrawer extends StatelessWidget {
                     Navigator.pushNamed(context, '/report'),
                   },
             ),
+            ListTile(
+              leading: Icon(Icons.picture_as_pdf, color: Colors.black),
+              title: Text('Module PDF', style: TextStyle(color: Colors.black)),
+              onTap:
+                  () => {
+                    Navigator.pop(context),
+                    Navigator.pushNamed(context, '/module'),
+                  },
+            ),
             Spacer(), // Push logout button to the bottom
             Divider(
               color: Colors.black54,

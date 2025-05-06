@@ -83,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   borderRadius: BorderRadius.circular(12),
                   child: CarouselSlider(
                     options: CarouselOptions(
-                      height: 200,
+                      height: MediaQuery.of(context).size.height / 4.7,
                       autoPlay: true,
                       autoPlayInterval: Duration(seconds: 3),
                       enlargeCenterPage: true,

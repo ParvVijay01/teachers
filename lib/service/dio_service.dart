@@ -1,6 +1,12 @@
 import 'package:LNP_Guru/models/banners.dart';
+import 'package:LNP_Guru/models/centers.dart';
+import 'package:LNP_Guru/models/modules/classes..dart';
+import 'package:LNP_Guru/models/modules/module_courses.dart';
+import 'package:LNP_Guru/models/modules/module_pdf.dart';
+import 'package:LNP_Guru/models/modules/module_subjects.dart';
+import 'package:LNP_Guru/models/modules/module_topics.dart';
 import 'package:dio/dio.dart';
-import 'package:LNP_Guru/models/classes.dart';
+import 'package:LNP_Guru/models/batches.dart';
 import 'package:LNP_Guru/models/notice.dart';
 import 'package:LNP_Guru/models/schedule.dart';
 import 'package:LNP_Guru/models/subject.dart';
@@ -60,12 +66,96 @@ class DioService {
     }
   }
 
-  Future<List<Classes>> fetchClasses() async {
+  Future<List<Batches>> fetchBatches() async {
     try {
       final response = await _dio.get("/class/classes");
       if (response.statusCode == 200) {
         List<dynamic> data = response.data;
+        return data.map((json) => Batches.fromJson(json)).toList();
+      } else {
+        throw Exception("Failed to load data");
+      }
+    } catch (e) {
+      throw Exception("Error: $e");
+    }
+  }
+
+  Future<List<Classes>> fetchClasses() async {
+    try {
+      final response = await _dio.get("/module/get-classess");
+      if (response.statusCode == 200) {
+        List<dynamic> data = response.data;
         return data.map((json) => Classes.fromJson(json)).toList();
+      } else {
+        throw Exception("Failed to load data");
+      }
+    } catch (e) {
+      throw Exception("Error: $e");
+    }
+  }
+
+  Future<List<ModuleSubjects>> fetchModuleSubjects() async {
+    try {
+      final response = await _dio.get("/module/get-subjects");
+      if (response.statusCode == 200) {
+        List<dynamic> data = response.data;
+        return data.map((json) => ModuleSubjects.fromJson(json)).toList();
+      } else {
+        throw Exception("Failed to load data");
+      }
+    } catch (e) {
+      throw Exception("Error: $e");
+    }
+  }
+
+  Future<List<ModuleTopics>> fetchModuleTopics() async {
+    try {
+      final response = await _dio.get("/module/get-topics");
+      if (response.statusCode == 200) {
+        List<dynamic> data = response.data;
+        return data.map((json) => ModuleTopics.fromJson(json)).toList();
+      } else {
+        throw Exception("Failed to load data");
+      }
+    } catch (e) {
+      throw Exception("Error: $e");
+    }
+  }
+
+  Future<List<ModuleCourses>> fetchModuleCourses() async {
+    try {
+      final response = await _dio.get("/module/get-courses");
+      if (response.statusCode == 200) {
+        List<dynamic> data = response.data;
+        return data.map((json) => ModuleCourses.fromJson(json)).toList();
+      } else {
+        throw Exception("Failed to load data");
+      }
+    } catch (e) {
+      throw Exception("Error: $e");
+    }
+  }
+
+  Future<List<ModulePDF>> fetchModulePDF() async {
+    try {
+      final response = await _dio.get("/module/get-modules");
+      if (response.statusCode == 200) {
+        List<dynamic> data = response.data;
+        return data.map((json) => ModulePDF.fromJson(json)).toList();
+      } else {
+        throw Exception("Failed to load data");
+      }
+    } catch (e) {
+      throw Exception("Error: $e");
+    }
+  }
+
+  Future<List<Centers>> fetchCenters() async {
+    try {
+      final response = await _dio.get("/center/centers");
+      if (response.statusCode == 200) {
+        List<dynamic> data = response.data;
+        return data.map((json) => Centers.fromJson(json)).toList();
       } else {
         throw Exception("Failed to load data");
       }

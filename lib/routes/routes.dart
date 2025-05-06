@@ -1,3 +1,4 @@
+import 'package:LNP_Guru/screens/modulespdf/module_pdf.dart';
 import 'package:flutter/material.dart';
 import 'package:LNP_Guru/screens/auth/login/login.dart';
 import 'package:LNP_Guru/screens/auth/onboarding/onboarding_screen.dart';
@@ -17,6 +18,7 @@ class AppRoutes {
   static const String tutorials = '/tutorials';
   static const String profile = '/profile';
   static const String report = '/report';
+  static const String module = '/module';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -43,6 +45,9 @@ class AppRoutes {
 
       case report:
         return MaterialPageRoute(builder: (_) => ReportScreen());
+
+      case module:
+        return MaterialPageRoute(builder: (_) => Modules());
 
       default:
         return _errorRoute("Page not found!");
