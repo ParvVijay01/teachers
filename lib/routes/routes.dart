@@ -1,4 +1,4 @@
-import 'package:LNP_Guru/screens/modulespdf/module_pdf.dart';
+import 'package:LNP_Guru/screens/modulespdf/module.dart';
 import 'package:flutter/material.dart';
 import 'package:LNP_Guru/screens/auth/login/login.dart';
 import 'package:LNP_Guru/screens/auth/onboarding/onboarding_screen.dart';
